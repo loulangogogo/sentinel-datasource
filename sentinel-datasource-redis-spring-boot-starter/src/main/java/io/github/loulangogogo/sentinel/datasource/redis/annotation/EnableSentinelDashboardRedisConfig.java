@@ -1,7 +1,6 @@
 package io.github.loulangogogo.sentinel.datasource.redis.annotation;
 
 import io.github.loulangogogo.sentinel.datasource.redis.client.SentinelRedisClient;
-import io.github.loulangogogo.sentinel.datasource.redis.config.SentinelRedisConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -16,6 +15,6 @@ import java.lang.annotation.*;
 @Target(value = {ElementType.TYPE})  //作用与类
 @Retention(RetentionPolicy.RUNTIME)  //运行时注解
 @Documented                          //可以被javadoc识别处理
-@Import(SentinelRedisClient.class)
+@Import({ConfigCheck.class,SentinelRedisClient.class})
 public @interface EnableSentinelDashboardRedisConfig {
 }

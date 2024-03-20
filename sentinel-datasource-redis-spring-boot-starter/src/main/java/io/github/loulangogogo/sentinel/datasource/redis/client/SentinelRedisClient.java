@@ -3,9 +3,9 @@ package io.github.loulangogogo.sentinel.datasource.redis.client;
 import com.alibaba.csp.sentinel.dashboard.client.SentinelApiClient;
 import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.*;
 import com.alibaba.csp.sentinel.util.AssertUtil;
-import com.alibaba.fastjson.JSON;
 import io.gitee.loulan_yxq.owner.core.collection.CollTool;
 import io.gitee.loulan_yxq.owner.core.tool.StrTool;
+import io.gitee.loulan_yxq.owner.json.tool.JsonTool;
 import io.github.loulangogogo.sentinel.datasource.redis.base.RedisKey;
 import io.github.loulangogogo.sentinel.datasource.redis.enums.RuleTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -237,7 +237,7 @@ public class SentinelRedisClient extends SentinelApiClient {
         if (StrTool.isEmpty(rulesJson)) {
             return CollTool.list();
         }
-        return JSON.parseArray(rulesJson, clzz);
+        return JsonTool.parseList(rulesJson,clzz);
     }
 
     /**
@@ -253,7 +253,7 @@ public class SentinelRedisClient extends SentinelApiClient {
     private boolean setRules(String app, String type, List rules) {
         AssertUtil.notEmpty(app, "应用服务名称不能为空");
         AssertUtil.notNull(rules, "规则不能为空");
-        String rulesJson = JSON.toJSONString(rules);
+        String rulesJson = JsonTool.toJson(rules);
         redisTemplate.opsForValue().set(RedisKey.SENTINEL_CONFIG_PRE + app + ":" + type, rulesJson);
         redisTemplate.convertAndSend(RedisKey.SENTINEL_CHANNEL_PRE + app + ":" + type, rulesJson);
         return true;

@@ -15,6 +15,6 @@ import java.lang.annotation.*;
 @Target(value = {ElementType.TYPE})  //作用与类
 @Retention(RetentionPolicy.RUNTIME)  //运行时注解
 @Documented                          //可以被javadoc识别处理
-@Import(SentinelRedisConfiguration.class)
+@Import({ConfigCheck.class,SentinelRedisConfiguration.class})
 public @interface EnableSentinelClientRedisConfig {
 }

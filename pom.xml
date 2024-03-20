@@ -46,6 +46,27 @@
                 <artifactId>owner-core</artifactId>
                 <version>${owner.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.gitee.loulan_yxq</groupId>
+                <artifactId>owner-json</artifactId>
+                <version>${owner.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <!--maven编译版本管理-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

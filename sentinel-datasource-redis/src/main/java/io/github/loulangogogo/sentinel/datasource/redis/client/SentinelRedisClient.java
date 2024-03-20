@@ -6,7 +6,10 @@ import com.alibaba.csp.sentinel.util.AssertUtil;
 import com.alibaba.fastjson.JSON;
 import io.gitee.loulan_yxq.owner.core.collection.CollTool;
 import io.gitee.loulan_yxq.owner.core.tool.StrTool;
+import io.github.loulangogogo.sentinel.datasource.redis.base.RedisKey;
+import io.github.loulangogogo.sentinel.datasource.redis.enums.RuleTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -23,21 +26,11 @@ import java.util.concurrent.CompletableFuture;
  *********************************************************/
 @Component
 @Primary
+@ConditionalOnClass(SentinelApiClient.class)
 public class SentinelRedisClient extends SentinelApiClient {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
-
-    // 这里需要定义常量替换掉
-    private static String SENTINEL_CHANNEL_PRE = "Sentinel:Channel:";
-    private static String SENTINEL_CONFIG_PRE = "Sentinel:Config:";
-
-    // fixme 2024/3/19(待修改) 这里使用枚举替换掉
-    private static final String FLOW_RULE_TYPE = "flow";
-    private static final String DEGRADE_RULE_TYPE = "degrade";
-    private static final String PARAM_FLOW_RULE_TYPE = "paramFlow";
-    private static final String SYSTEM_RULE_TYPE = "system";
-    private static final String AUTH_RULE_TYPE = "authority";
 
     /**
      * 获取授权规则的方法
@@ -51,7 +44,7 @@ public class SentinelRedisClient extends SentinelApiClient {
      */
     @Override
     public List<AuthorityRuleEntity> fetchAuthorityRulesOfMachine(String app, String ip, int port) {
-        return fetchRules(app, AUTH_RULE_TYPE, AuthorityRuleEntity.class);
+        return fetchRules(app, RuleTypeEnum.AUTH.getName(), AuthorityRuleEntity.class);
     }
 
     /**
@@ -69,7 +62,7 @@ public class SentinelRedisClient extends SentinelApiClient {
     public boolean setAuthorityRuleOfMachine(String app, String ip, int port, List<AuthorityRuleEntity> rules) {
         AssertUtil.notEmpty(app, "应用服务名称不能为空");
         AssertUtil.notNull(rules, "授权规则不能为空");
-        return setRules(app, AUTH_RULE_TYPE, rules);
+        return setRules(app, RuleTypeEnum.AUTH.getName(), rules);
     }
 
     /**
@@ -84,7 +77,7 @@ public class SentinelRedisClient extends SentinelApiClient {
      */
     @Override
     public List<SystemRuleEntity> fetchSystemRuleOfMachine(String app, String ip, int port) {
-        return fetchRules(app, SYSTEM_RULE_TYPE, SystemRuleEntity.class);
+        return fetchRules(app, RuleTypeEnum.SYSTEM.getName(), SystemRuleEntity.class);
     }
 
     /**
@@ -102,7 +95,7 @@ public class SentinelRedisClient extends SentinelApiClient {
     public boolean setSystemRuleOfMachine(String app, String ip, int port, List<SystemRuleEntity> rules) {
         AssertUtil.notEmpty(app, "应用服务名称不能为空");
         AssertUtil.notNull(rules, "系统规则不能为空");
-        return setRules(app, SYSTEM_RULE_TYPE, rules);
+        return setRules(app, RuleTypeEnum.SYSTEM.getName(), rules);
     }
 
     /**
@@ -118,7 +111,7 @@ public class SentinelRedisClient extends SentinelApiClient {
     @Override
     public CompletableFuture<List<ParamFlowRuleEntity>> fetchParamFlowRulesOfMachine(String app, String ip, int port) {
         return CompletableFuture.supplyAsync(() -> {
-            return fetchRules(app, PARAM_FLOW_RULE_TYPE, ParamFlowRuleEntity.class);
+            return fetchRules(app, RuleTypeEnum.PARAM_FLOW.getName(), ParamFlowRuleEntity.class);
         });
     }
 
@@ -138,7 +131,7 @@ public class SentinelRedisClient extends SentinelApiClient {
         AssertUtil.notEmpty(app, "应用服务名称不能为空");
         AssertUtil.notNull(rules, "热点规则不能为空");
         return CompletableFuture.runAsync(() -> {
-            setRules(app, PARAM_FLOW_RULE_TYPE, rules);
+            setRules(app, RuleTypeEnum.PARAM_FLOW.getName(), rules);
         });
     }
 
@@ -154,7 +147,7 @@ public class SentinelRedisClient extends SentinelApiClient {
      */
     @Override
     public List<DegradeRuleEntity> fetchDegradeRuleOfMachine(String app, String ip, int port) {
-        return fetchRules(app, DEGRADE_RULE_TYPE, DegradeRuleEntity.class);
+        return fetchRules(app, RuleTypeEnum.DEGRADE.getName(), DegradeRuleEntity.class);
     }
 
     /**
@@ -172,7 +165,7 @@ public class SentinelRedisClient extends SentinelApiClient {
     public boolean setDegradeRuleOfMachine(String app, String ip, int port, List<DegradeRuleEntity> rules) {
         AssertUtil.notEmpty(app, "应用服务名称不能为空");
         AssertUtil.notNull(rules, "熔断规则不能为空");
-        return setRules(app, DEGRADE_RULE_TYPE, rules);
+        return setRules(app, RuleTypeEnum.DEGRADE.getName(), rules);
     }
 
 
@@ -188,7 +181,7 @@ public class SentinelRedisClient extends SentinelApiClient {
      */
     @Override
     public List<FlowRuleEntity> fetchFlowRuleOfMachine(String app, String ip, int port) {
-        return fetchRules(app, FLOW_RULE_TYPE, FlowRuleEntity.class);
+        return fetchRules(app, RuleTypeEnum.FLOW.getName(), FlowRuleEntity.class);
     }
 
     /**
@@ -206,7 +199,7 @@ public class SentinelRedisClient extends SentinelApiClient {
     public boolean setFlowRuleOfMachine(String app, String ip, int port, List<FlowRuleEntity> rules) {
         AssertUtil.notEmpty(app, "应用服务名称不能为空");
         AssertUtil.notNull(rules, "流控规则不能为空");
-        return setRules(app, FLOW_RULE_TYPE, rules);
+        return setRules(app, RuleTypeEnum.FLOW.getName(), rules);
     }
 
     /**
@@ -224,7 +217,6 @@ public class SentinelRedisClient extends SentinelApiClient {
     public CompletableFuture<Void> setFlowRuleOfMachineAsync(String app, String ip, int port, List<FlowRuleEntity> rules) {
         AssertUtil.notEmpty(app, "应用服务名称不能为空");
         AssertUtil.notNull(rules, "流控规则不能为空");
-        // fixme 2024/3/19(待修改) 这是什么鬼东西
         return CompletableFuture.runAsync(() -> {
             setFlowRuleOfMachine(app, ip, port, rules);
         });
@@ -241,7 +233,7 @@ public class SentinelRedisClient extends SentinelApiClient {
      * @author :loulan
      */
     private <T> List<T> fetchRules(String app, String type, Class<T> clzz) {
-        String rulesJson = redisTemplate.opsForValue().get(SENTINEL_CONFIG_PRE + app + ":" + type);
+        String rulesJson = redisTemplate.opsForValue().get(RedisKey.SENTINEL_CONFIG_PRE + app + ":" + type);
         if (StrTool.isEmpty(rulesJson)) {
             return CollTool.list();
         }
@@ -262,8 +254,8 @@ public class SentinelRedisClient extends SentinelApiClient {
         AssertUtil.notEmpty(app, "应用服务名称不能为空");
         AssertUtil.notNull(rules, "规则不能为空");
         String rulesJson = JSON.toJSONString(rules);
-        redisTemplate.opsForValue().set(SENTINEL_CONFIG_PRE + app + ":" + type, rulesJson);
-        redisTemplate.convertAndSend(SENTINEL_CHANNEL_PRE + app + ":" + type, rulesJson);
+        redisTemplate.opsForValue().set(RedisKey.SENTINEL_CONFIG_PRE + app + ":" + type, rulesJson);
+        redisTemplate.convertAndSend(RedisKey.SENTINEL_CHANNEL_PRE + app + ":" + type, rulesJson);
         return true;
     }
 }

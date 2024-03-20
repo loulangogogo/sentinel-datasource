@@ -23,19 +23,22 @@
             <artifactId>sentinel-datasource-redis</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.gitee.loulan_yxq</groupId>
             <artifactId>owner-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.gitee.loulan_yxq</groupId>
+            <artifactId>owner-json</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-dashboard</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

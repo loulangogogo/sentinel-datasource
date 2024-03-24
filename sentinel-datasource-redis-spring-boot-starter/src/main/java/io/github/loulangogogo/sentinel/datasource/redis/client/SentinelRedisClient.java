@@ -39,7 +39,6 @@ public class SentinelRedisClient extends SentinelApiClient {
      * @param ip  对应服务的ip【redis中不用】
      * @param app 对应服务的httpserver端口【redis中不用】
      * @return 规则数据
-     * @throws
      * @author :loulan
      */
     @Override
@@ -55,7 +54,6 @@ public class SentinelRedisClient extends SentinelApiClient {
      * @param app   对应服务的httpserver端口【redis中不用】
      * @param rules 要进行设置的规则
      * @return 设置成功与否
-     * @throws
      * @author :loulan
      */
     @Override
@@ -72,7 +70,6 @@ public class SentinelRedisClient extends SentinelApiClient {
      * @param ip  对应服务的ip【redis中不用】
      * @param app 对应服务的httpserver端口【redis中不用】
      * @return 规则数据
-     * @throws
      * @author :loulan
      */
     @Override
@@ -88,7 +85,6 @@ public class SentinelRedisClient extends SentinelApiClient {
      * @param app   对应服务的httpserver端口【redis中不用】
      * @param rules 要进行设置的规则
      * @return 设置成功与否
-     * @throws
      * @author :loulan
      */
     @Override
@@ -105,7 +101,6 @@ public class SentinelRedisClient extends SentinelApiClient {
      * @param ip  对应服务的ip【redis中不用】
      * @param app 对应服务的httpserver端口【redis中不用】
      * @return 异步可执行方法
-     * @throws
      * @author :loulan
      */
     @Override
@@ -123,7 +118,6 @@ public class SentinelRedisClient extends SentinelApiClient {
      * @param app   对应服务的httpserver端口【redis中不用】
      * @param rules 要进行设置的规则
      * @return 异步可执行对象
-     * @throws
      * @author :loulan
      */
     @Override
@@ -142,7 +136,6 @@ public class SentinelRedisClient extends SentinelApiClient {
      * @param ip  对应服务的ip【redis中不用】
      * @param app 对应服务的httpserver端口【redis中不用】
      * @return 规则数据
-     * @throws
      * @author :loulan
      */
     @Override
@@ -158,7 +151,6 @@ public class SentinelRedisClient extends SentinelApiClient {
      * @param app   对应服务的httpserver端口【redis中不用】
      * @param rules 要进行设置的规则
      * @return 设置成功与否
-     * @throws
      * @author :loulan
      */
     @Override
@@ -176,7 +168,6 @@ public class SentinelRedisClient extends SentinelApiClient {
      * @param ip  对应服务的ip【redis中不用】
      * @param app 对应服务的httpserver端口【redis中不用】
      * @return 规则数据
-     * @throws
      * @author :loulan
      */
     @Override
@@ -185,14 +176,13 @@ public class SentinelRedisClient extends SentinelApiClient {
     }
 
     /**
-     * 设置留空规则到机器
+     * 设置流控制规则到机器
      *
      * @param app   应用服务的名称
      * @param ip    对应服务的ip【redis中不用】
      * @param app   对应服务的httpserver端口【redis中不用】
      * @param rules 要进行设置的规则
-     * @return
-     * @throws
+     * @return 设置流控制规则是否成功
      * @author :loulan
      */
     @Override
@@ -209,8 +199,7 @@ public class SentinelRedisClient extends SentinelApiClient {
      * @param ip    对应服务的ip【redis中不用】
      * @param app   对应服务的httpserver端口【redis中不用】
      * @param rules 要进行设置的规则
-     * @return
-     * @throws
+     * @return 异步对象
      * @author :loulan
      */
     @Override
@@ -229,7 +218,6 @@ public class SentinelRedisClient extends SentinelApiClient {
      * @param type 规则类型
      * @param clzz 规则的类
      * @return 规则集合数据
-     * @throws
      * @author :loulan
      */
     private <T> List<T> fetchRules(String app, String type, Class<T> clzz) {
@@ -237,7 +225,7 @@ public class SentinelRedisClient extends SentinelApiClient {
         if (StrTool.isEmpty(rulesJson)) {
             return CollTool.list();
         }
-        return JsonTool.parseList(rulesJson,clzz);
+        return JsonTool.parseList(rulesJson, clzz);
     }
 
     /**
@@ -247,7 +235,6 @@ public class SentinelRedisClient extends SentinelApiClient {
      * @param type  规则类型
      * @param rules 规则数据
      * @return 设置是否成功
-     * @throws
      * @author :loulan
      */
     private boolean setRules(String app, String type, List rules) {
